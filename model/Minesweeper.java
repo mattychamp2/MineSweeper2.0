@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Minesweeper extends AbstractMineSweeper {
@@ -9,6 +10,9 @@ public class Minesweeper extends AbstractMineSweeper {
     private AbstractTile[][] world;
     private int flagsSet;
     private boolean firstClick;
+    private ArrayList<Integer> toOpenX;
+    private ArrayList<Integer> toOpenY;
+    private int temp;
 
 
     @Override
@@ -52,6 +56,7 @@ public class Minesweeper extends AbstractMineSweeper {
             flagsSet = 0;
         }
         firstClick = true;
+        temp = 0;
         generateWorld(height, width, mines);
     }
 
@@ -77,7 +82,7 @@ public class Minesweeper extends AbstractMineSweeper {
         setNumbers();
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                System.out.print(world[i][j].isExplosive());
+                System.out.print(world[i][j].isExplosive() + "\t");
             }
             System.out.println();
         }
@@ -139,25 +144,9 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     public void open(int x, int y) {
         world[x][y].open();
-        this.viewNotifier.notifyOpened(x,y,world[x][y].getExplosiveCount());
-        if (world[x][y].getExplosiveCount() == 0) {
-            openAround(x, y);
-        }
+        this.viewNotifier.notifyOpened(x, y, world[x][y].getExplosiveCount());
     }
 
-    public void openAround(int x, int y) {
-        for (int i = x - 1; i == x + 1; i++) {
-            for (int j = y - 1; j == y + 1; j++) {
-                try {
-                    if (!world[i][j].isExplosive()) {
-                        open(i, j);
-                        this.viewNotifier.notifyOpened(i,j,world[i][j].getExplosiveCount());
-                    }
-                } catch(Exception e){
-                }
-            }
-        }//pojdjpdfs
-    }
 
     @Override
     public void flag(int x, int y) {
@@ -172,6 +161,7 @@ public class Minesweeper extends AbstractMineSweeper {
     @Override
     public void deactivateFirstTileRule() {
         int count = 0;
+        System.out.println("bomb was moved");
         for (int i = 0; i < world.length; i++) {
             for (int j = 0; j < world[i].length; j++) {
                 if (!getTile(i, j).isExplosive() && count == 0) {

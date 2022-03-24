@@ -168,6 +168,7 @@ public class MinesweeperView implements IGameStateNotifier {
                             if (gameModel != null) {
                                 if (!gameModel.getTile(temp.getPositionX(), temp.getPositionY()).isExplosive()) {
                                         gameModel.open(temp.getPositionX(), temp.getPositionY());
+                                        gameModel.click();
                                         //notifyOpened(temp.getPositionX(), temp.getPositionY(), gameModel.getTile(temp.getPositionX(), temp.getPositionY()).getExplosiveCount());
                                 } else {
                                     if (!gameModel.getFirstClick()) {
