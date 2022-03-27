@@ -4,15 +4,7 @@ import model.Difficulty;
 import model.PlayableMinesweeper;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 import javax.swing.plaf.DimensionUIResource;
 
 import java.awt.event.MouseAdapter;
@@ -40,6 +32,7 @@ public class MinesweeperView implements IGameStateNotifier {
 
     private PlayableMinesweeper gameModel;
     private JFrame window;
+    private JOptionPane winScreen, lossScreen;
     private JMenuBar menuBar;
     private JMenu gameMenu;
     private JMenuItem easyGame, mediumGame, hardGame;
@@ -50,6 +43,7 @@ public class MinesweeperView implements IGameStateNotifier {
     private JLabel timerView = new JLabel();
     private JLabel flagCountView = new JLabel();
     private JLabel minesOnMap = new JLabel();
+    private int openedTiles;
 
     public MinesweeperView() {
         this.window = new JFrame("Minesweeper");
@@ -57,7 +51,8 @@ public class MinesweeperView implements IGameStateNotifier {
         this.menuBar = new JMenuBar();
         this.gameMenu = new JMenu("New Game");
         this.menuBar.add(gameMenu);
-
+        this.lossScreen = new JOptionPane();
+        this.winScreen = new JOptionPane();
         this.easyGame = new JMenuItem("Easy");
         this.gameMenu.add(this.easyGame);
         this.easyGame.addActionListener((ActionEvent e) -> {
@@ -169,12 +164,17 @@ public class MinesweeperView implements IGameStateNotifier {
                                 if (!gameModel.getTile(temp.getPositionX(), temp.getPositionY()).isExplosive()) {
                                         gameModel.open(temp.getPositionX(), temp.getPositionY());
                                         gameModel.click();
+                                        openedTiles++;
+                                        if(openedTiles==((gameModel.getHeight()*gameModel.getWidth())-gameModel.getMines())){
+                                            JOptionPane.showMessageDialog(winScreen, "congrats, you won");
+                                        }
                                         //notifyOpened(temp.getPositionX(), temp.getPositionY(), gameModel.getTile(temp.getPositionX(), temp.getPositionY()).getExplosiveCount());
                                 } else {
                                     if (!gameModel.getFirstClick()) {
                                         gameModel.open(temp.getPositionX(), temp.getPositionY());
                                         notifyExploded(temp.getPositionX(), temp.getPositionY());
-                                        //notifyGameLost();
+                                        notifyGameLost();
+                                        JOptionPane.showMessageDialog(lossScreen, "you lost");
                                     }
                                     else{
                                         gameModel.getTile(temp.getPositionX(), temp.getPositionY()).setSafe();
@@ -191,7 +191,7 @@ public class MinesweeperView implements IGameStateNotifier {
                                     gameModel.toggleFlag(temp.getPositionX(), temp.getPositionY());
                                     notifyUnflagged(temp.getPositionX(), temp.getPositionY());
                                     notifyFlagCountChanged(gameModel.getFlags());
-                                } else if (gameModel.getFlags() != Integer.parseInt(minesOnMap.getText())) {
+                                } else if (gameModel.getFlags() != gameModel.getMines()) {
                                     gameModel.toggleFlag(temp.getPositionX(), temp.getPositionY());
                                     notifyFlagged(temp.getPositionX(), temp.getPositionY());
                                     notifyFlagCountChanged(gameModel.getFlags());
