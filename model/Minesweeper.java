@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Minesweeper extends AbstractMineSweeper {
     private int width;
@@ -13,7 +15,15 @@ public class Minesweeper extends AbstractMineSweeper {
     private ArrayList<Integer> toOpenX;
     private ArrayList<Integer> toOpenY;
     private int temp;
-
+    int secondsPassed = 0;
+    Timer myTimer = new Timer();
+    TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            secondsPassed++;
+            System.out.print(secondsPassed);
+        }
+    };
 
     @Override
     public int getWidth() {
