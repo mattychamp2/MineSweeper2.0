@@ -57,7 +57,7 @@ public class MinesweeperView implements IGameStateNotifier {
 
     public MinesweeperView() {
         timer();
-        DecimalFormat doubleFormat = new DecimalFormat("00");
+
         this.window = new JFrame("Minesweeper");
         timerPanel.setLayout(new FlowLayout());
         this.menuBar = new JMenuBar();
@@ -95,6 +95,7 @@ public class MinesweeperView implements IGameStateNotifier {
             timerPanel.add(clockIcon);
             timerPanel.add(new JLabel("TIME ELAPSED: "));
             timerPanel.add(this.timerView);
+            timerView.setText("00:00");
         } catch (IOException e) {
             System.out.println("Unable to locate clock resource");
         }
@@ -160,6 +161,7 @@ public class MinesweeperView implements IGameStateNotifier {
     public void timer(){
         seconds=0;
         minutes=0;
+        DecimalFormat doubleFormat = new DecimalFormat("00");
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -168,10 +170,10 @@ public class MinesweeperView implements IGameStateNotifier {
                     seconds=0;
                     minutes++;
                 }
-                //doubleSeconds=doubleFormat.format(seconds);
-                //doubleMinutes=doubleFormat.format(minutes);
-                //timerView.setText(doubleMinutes+":"+doubleSeconds);
-                timerView.setText(minutes+":"+seconds);
+                doubleSeconds=doubleFormat.format(seconds);
+                doubleMinutes=doubleFormat.format(minutes);
+                timerView.setText(doubleMinutes+":"+doubleSeconds);
+                //timerView.setText(minutes+":"+seconds);
             }
         });
     }
