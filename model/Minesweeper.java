@@ -15,6 +15,7 @@ public class Minesweeper extends AbstractMineSweeper {
     private ArrayList<Integer> toOpenX;
     private ArrayList<Integer> toOpenY;
     private int temp;
+
     int secondsPassed = 0;
     Timer myTimer = new Timer();
     TimerTask task = new TimerTask() {
@@ -24,6 +25,10 @@ public class Minesweeper extends AbstractMineSweeper {
             System.out.print(secondsPassed);
         }
     };
+
+    public void start(){
+        myTimer.scheduleAtFixedRate(task,1000,1000);
+    }
 
     @Override
     public int getWidth() {
@@ -128,6 +133,7 @@ public class Minesweeper extends AbstractMineSweeper {
         flagsSet = 0;
         firstClick = true;
         generateWorld(height, width, mines);
+        //myTimer.start();
     }
 
     @Override

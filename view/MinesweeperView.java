@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.plaf.DimensionUIResource;
 
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -17,6 +18,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+
+import java.text.DecimalFormat;
 
 import notifier.IGameStateNotifier;
 
@@ -45,7 +48,16 @@ public class MinesweeperView implements IGameStateNotifier {
     private JLabel minesOnMap = new JLabel();
     private int openedTiles;
 
+    private int seconds;
+    private int minutes;
+    private Timer timer;
+    private String doubleSeconds;
+    private String doubleMinutes;
+    private DecimalFormat doubleFormat;
+
     public MinesweeperView() {
+        timer();
+        DecimalFormat doubleFormat = new DecimalFormat("00");
         this.window = new JFrame("Minesweeper");
         timerPanel.setLayout(new FlowLayout());
         this.menuBar = new JMenuBar();
@@ -145,6 +157,26 @@ public class MinesweeperView implements IGameStateNotifier {
         this.gameModel.setGameStateNotifier(this);
     }
 
+    public void timer(){
+        seconds=0;
+        minutes=0;
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                seconds++;
+                if (seconds==60){
+                    seconds=0;
+                    minutes++;
+                }
+                //doubleSeconds=doubleFormat.format(seconds);
+                //doubleMinutes=doubleFormat.format(minutes);
+                //timerView.setText(doubleMinutes+":"+doubleSeconds);
+                timerView.setText(minutes+":"+seconds);
+            }
+        });
+    }
+
+
     @Override
     public void notifyNewGame(int row, int col) {
         this.flagCountView.setText("0");
@@ -152,6 +184,7 @@ public class MinesweeperView implements IGameStateNotifier {
         this.window.setSize(col * TILE_SIZE, row * TILE_SIZE + 30);
         this.world.removeAll();
 
+        timer.start();
         this.tiles = new TileView[row][col];
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < col; ++j) {
