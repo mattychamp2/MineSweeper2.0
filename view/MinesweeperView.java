@@ -202,11 +202,9 @@ public class MinesweeperView implements IGameStateNotifier {
                                     openedTiles++;
                                     if (gameModel.checkWin()) {
                                         JOptionPane.showMessageDialog(winScreen, "congrats, you won");
-                                    }
-                                    else{
+                                    } else {
                                         gameModel.openAround(temp.getPositionX(), temp.getPositionY());
                                     }
-                                    //notifyOpened(temp.getPositionX(), temp.getPositionY(), gameModel.getTile(temp.getPositionX(), temp.getPositionY()).getExplosiveCount());
                                 } else if (!gameModel.getTile(temp.getPositionX(), temp.getPositionY()).isOpened()) {
                                     if (!gameModel.getFirstClick()) {
                                         gameModel.open(temp.getPositionX(), temp.getPositionY());
@@ -218,7 +216,6 @@ public class MinesweeperView implements IGameStateNotifier {
                                         gameModel.deactivateFirstTileRule();
                                         gameModel.click();
                                         gameModel.open(temp.getPositionX(), temp.getPositionY());
-                                        //notifyOpened(temp.getPositionX(), temp.getPositionY(), gameModel.getTile(temp.getPositionX(), temp.getPositionY()).getExplosiveCount());
                                     }
                                 }
                             }

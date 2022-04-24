@@ -12,19 +12,25 @@ public class TileView extends JButton implements ITileStateNotifier {
     private static ImageIcon bombIcon = new ImageIcon(AssetPath.BOMB_ICON);
 
     private int x, y;
+
     public TileView(int x, int y) {
         super();
         this.x = x;
         this.y = y;
     }
 
-    public int getPositionX() {return x;}
-    public int getPositionY() {return y;}
+    public int getPositionX() {
+        return x;
+    }
+
+    public int getPositionY() {
+        return y;
+    }
 
     @Override
     public void notifyOpened(int explosiveNeighbourCount) {
         super.setIcon(null);
-        super.setText((explosiveNeighbourCount> 0)? Integer.toString(explosiveNeighbourCount) : "");
+        super.setText((explosiveNeighbourCount > 0) ? Integer.toString(explosiveNeighbourCount) : "");
         super.setEnabled(false);
     }
 
@@ -39,8 +45,8 @@ public class TileView extends JButton implements ITileStateNotifier {
     }
 
     public void removalAllMouseListeners() {
-        for (MouseListener listener : super.getMouseListeners()) 
-            this.removeMouseListener(listener);    
+        for (MouseListener listener : super.getMouseListeners())
+            this.removeMouseListener(listener);
     }
 
     @Override
@@ -51,8 +57,8 @@ public class TileView extends JButton implements ITileStateNotifier {
     }
 
     @Override
-    public String toString(){
-        return "["+Integer.toString(x)+","+Integer.toString(y)+"]";
+    public String toString() {
+        return "[" + Integer.toString(x) + "," + Integer.toString(y) + "]";
     }
-    
+
 }

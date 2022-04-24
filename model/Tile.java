@@ -7,7 +7,7 @@ public class Tile extends AbstractTile {
     private boolean mined;
     private int explosiveCount;
 
-    public Tile(boolean explosive){
+    public Tile(boolean explosive) {
         opened = false;
         flagged = false;
         mined = explosive;
@@ -18,9 +18,8 @@ public class Tile extends AbstractTile {
     public boolean open() {
         if (isOpened()) {
             return false;
-        }
-        else{
-            opened=true;
+        } else {
+            opened = true;
             return true;
         }
     }
@@ -36,11 +35,11 @@ public class Tile extends AbstractTile {
     }
 
     @Override
-    public void toggledFlag(){
-        flagged= !flagged;
+    public void toggledFlag() {
+        flagged = !flagged;
     }
 
-    public void setSafe(){
+    public void setSafe() {
         mined = false;
     }
 
@@ -59,11 +58,13 @@ public class Tile extends AbstractTile {
         return opened;
     }
 
-    public void setExplosiveCount(int explosiveCount){
-        this.explosiveCount=explosiveCount;
+    public void setExplosiveCount(int explosiveCount) {
+        this.explosiveCount = explosiveCount;
     }
 
-    public int getExplosiveCount(){
+    public int getExplosiveCount() {
         return explosiveCount;
-    };
+    }
+
+    ;
 }
