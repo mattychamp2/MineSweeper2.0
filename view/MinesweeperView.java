@@ -196,18 +196,18 @@ public class MinesweeperView implements IGameStateNotifier {
                     public void mousePressed(MouseEvent arg0) {
                         if (arg0.getButton() == MouseEvent.BUTTON1) {
                             if (gameModel != null) {
-                                if (!gameModel.getTile(temp.getPositionX(), temp.getPositionY()).isExplosive()) {
+                                if (!gameModel.getTile(temp.getPositionX(), temp.getPositionY()).isExplosive() && !gameModel.getTile(temp.getPositionX(), temp.getPositionY()).isOpened()) {
                                     gameModel.open(temp.getPositionX(), temp.getPositionY());
                                     gameModel.click();
                                     openedTiles++;
-                                    if (openedTiles == ((gameModel.getHeight() * gameModel.getWidth()) - gameModel.getMines())) {
+                                    if (gameModel.checkWin()) {
                                         JOptionPane.showMessageDialog(winScreen, "congrats, you won");
                                     }
                                     else{
                                         gameModel.openAround(temp.getPositionX(), temp.getPositionY());
                                     }
                                     //notifyOpened(temp.getPositionX(), temp.getPositionY(), gameModel.getTile(temp.getPositionX(), temp.getPositionY()).getExplosiveCount());
-                                } else {
+                                } else if (!gameModel.getTile(temp.getPositionX(), temp.getPositionY()).isOpened()) {
                                     if (!gameModel.getFirstClick()) {
                                         gameModel.open(temp.getPositionX(), temp.getPositionY());
                                         notifyExploded(temp.getPositionX(), temp.getPositionY());

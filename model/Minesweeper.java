@@ -12,9 +12,8 @@ public class Minesweeper extends AbstractMineSweeper {
     private AbstractTile[][] world;
     private int flagsSet;
     private boolean firstClick;
-    private ArrayList<Integer[]> toOpen;
-    private ArrayList<Integer[]> alreadyOpened;
     private int temp;
+    private int tilesOpened;
 
     int secondsPassed = 0;
     Timer myTimer = new Timer();
@@ -79,8 +78,7 @@ public class Minesweeper extends AbstractMineSweeper {
         world = new AbstractTile[width][height];
         Random random = new Random();
         int minesPlaced = 0;
-        toOpen = new ArrayList<Integer[]>();
-        alreadyOpened = new ArrayList<Integer[]>();
+        tilesOpened = 0;
         while (minesPlaced < mines) {
             int nextX = random.nextInt(width);
             int nextY = random.nextInt(height);
@@ -165,6 +163,8 @@ public class Minesweeper extends AbstractMineSweeper {
     public void open(int x, int y) {
         world[x][y].open();
         this.viewNotifier.notifyOpened(x, y, world[x][y].getExplosiveCount());
+        tilesOpened++;
+        System.out.println(tilesOpened);
     }
 
     @Override
@@ -215,20 +215,23 @@ public class Minesweeper extends AbstractMineSweeper {
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
                     if (world[i][j].isOpened() && world[i][j].getExplosiveCount() == 0) {
-                        try {
-                            for (int k = i - 1; k <= i + 1; k++) {
-                                for (int l = j - 1; l <= j + 1; l++) {
+                        for (int k = i - 1; k <= i + 1; k++) {
+                            for (int l = j - 1; l <= j + 1; l++) {
+                                try {
                                     if (!world[k][l].isOpened()) {
                                         open(k, l);
                                     }
+                                } catch (Exception e) {
                                 }
                             }
-                        } catch (Exception e) {
-                            System.out.println("out of bounds, no problem");
                         }
                     }
                 }
             }
         }
+    }
+
+    public boolean checkWin() {
+        return tilesOpened == (width * height) - mines;
     }
 }

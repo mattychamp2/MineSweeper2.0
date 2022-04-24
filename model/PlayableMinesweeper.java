@@ -17,4 +17,5 @@ public interface PlayableMinesweeper {
     int getFlags();
     void setGameStateNotifier(IGameStateNotifier notifier);
     void openAround(int x, int y);
+    boolean checkWin();
 }
