@@ -12,8 +12,8 @@ public class Minesweeper extends AbstractMineSweeper {
     private AbstractTile[][] world;
     private int flagsSet;
     private boolean firstClick;
-    private ArrayList<Integer> toOpenX;
-    private ArrayList<Integer> toOpenY;
+    private ArrayList<Integer[]> toOpen;
+    private ArrayList<Integer[]> alreadyOpened;
     private int temp;
 
     int secondsPassed = 0;
@@ -26,8 +26,8 @@ public class Minesweeper extends AbstractMineSweeper {
         }
     };
 
-    public void start(){
-        myTimer.scheduleAtFixedRate(task,1000,1000);
+    public void start() {
+        myTimer.scheduleAtFixedRate(task, 1000, 1000);
     }
 
     @Override
@@ -79,6 +79,8 @@ public class Minesweeper extends AbstractMineSweeper {
         world = new AbstractTile[width][height];
         Random random = new Random();
         int minesPlaced = 0;
+        toOpen = new ArrayList<Integer[]>();
+        alreadyOpened = new ArrayList<Integer[]>();
         while (minesPlaced < mines) {
             int nextX = random.nextInt(width);
             int nextY = random.nextInt(height);
@@ -165,7 +167,6 @@ public class Minesweeper extends AbstractMineSweeper {
         this.viewNotifier.notifyOpened(x, y, world[x][y].getExplosiveCount());
     }
 
-
     @Override
     public void flag(int x, int y) {
         world[x][y].flag();
@@ -207,5 +208,27 @@ public class Minesweeper extends AbstractMineSweeper {
 
     public int getFlags() {
         return flagsSet;
+    }
+
+    public void openAround(int x, int y) {
+        for (int z = 0; z < 100; z++) {
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    if (world[i][j].isOpened() && world[i][j].getExplosiveCount() == 0) {
+                        try {
+                            for (int k = i - 1; k <= i + 1; k++) {
+                                for (int l = j - 1; l <= j + 1; l++) {
+                                    if (!world[k][l].isOpened()) {
+                                        open(k, l);
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            System.out.println("out of bounds, no problem");
+                        }
+                    }
+                }
+            }
+        }
     }
 }

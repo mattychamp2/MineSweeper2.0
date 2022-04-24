@@ -70,21 +70,21 @@ public class MinesweeperView implements IGameStateNotifier {
         this.easyGame.addActionListener((ActionEvent e) -> {
             if (gameModel != null)
                 gameModel.startNewGame(Difficulty.EASY);
-                notifyNewGame(gameModel.getWidth(), gameModel.getHeight());
+            notifyNewGame(gameModel.getWidth(), gameModel.getHeight());
         });
         this.mediumGame = new JMenuItem("Medium");
         this.gameMenu.add(this.mediumGame);
         this.mediumGame.addActionListener((ActionEvent e) -> {
             if (gameModel != null)
                 gameModel.startNewGame(Difficulty.MEDIUM);
-                notifyNewGame(gameModel.getWidth(), gameModel.getHeight());
+            notifyNewGame(gameModel.getWidth(), gameModel.getHeight());
         });
         this.hardGame = new JMenuItem("Hard");
         this.gameMenu.add(this.hardGame);
         this.hardGame.addActionListener((ActionEvent e) -> {
             if (gameModel != null)
                 gameModel.startNewGame(Difficulty.HARD);
-                notifyNewGame(gameModel.getHeight(), gameModel.getWidth());
+            notifyNewGame(gameModel.getHeight(), gameModel.getWidth());
         });
 
         this.window.setJMenuBar(this.menuBar);
@@ -158,21 +158,21 @@ public class MinesweeperView implements IGameStateNotifier {
         this.gameModel.setGameStateNotifier(this);
     }
 
-    public void timer(){
-        seconds=0;
-        minutes=0;
+    public void timer() {
+        seconds = 0;
+        minutes = 0;
         DecimalFormat doubleFormat = new DecimalFormat("00");
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 seconds++;
-                if (seconds==60){
-                    seconds=0;
+                if (seconds == 60) {
+                    seconds = 0;
                     minutes++;
                 }
-                doubleSeconds=doubleFormat.format(seconds);
-                doubleMinutes=doubleFormat.format(minutes);
-                timerView.setText(doubleMinutes+":"+doubleSeconds);
+                doubleSeconds = doubleFormat.format(seconds);
+                doubleMinutes = doubleFormat.format(minutes);
+                timerView.setText(doubleMinutes + ":" + doubleSeconds);
                 //timerView.setText(minutes+":"+seconds);
             }
         });
@@ -197,21 +197,23 @@ public class MinesweeperView implements IGameStateNotifier {
                         if (arg0.getButton() == MouseEvent.BUTTON1) {
                             if (gameModel != null) {
                                 if (!gameModel.getTile(temp.getPositionX(), temp.getPositionY()).isExplosive()) {
-                                        gameModel.open(temp.getPositionX(), temp.getPositionY());
-                                        gameModel.click();
-                                        openedTiles++;
-                                        if(openedTiles==((gameModel.getHeight()*gameModel.getWidth())-gameModel.getMines())){
-                                            JOptionPane.showMessageDialog(winScreen, "congrats, you won");
-                                        }
-                                        //notifyOpened(temp.getPositionX(), temp.getPositionY(), gameModel.getTile(temp.getPositionX(), temp.getPositionY()).getExplosiveCount());
+                                    gameModel.open(temp.getPositionX(), temp.getPositionY());
+                                    gameModel.click();
+                                    openedTiles++;
+                                    if (openedTiles == ((gameModel.getHeight() * gameModel.getWidth()) - gameModel.getMines())) {
+                                        JOptionPane.showMessageDialog(winScreen, "congrats, you won");
+                                    }
+                                    else{
+                                        gameModel.openAround(temp.getPositionX(), temp.getPositionY());
+                                    }
+                                    //notifyOpened(temp.getPositionX(), temp.getPositionY(), gameModel.getTile(temp.getPositionX(), temp.getPositionY()).getExplosiveCount());
                                 } else {
                                     if (!gameModel.getFirstClick()) {
                                         gameModel.open(temp.getPositionX(), temp.getPositionY());
                                         notifyExploded(temp.getPositionX(), temp.getPositionY());
                                         notifyGameLost();
                                         JOptionPane.showMessageDialog(lossScreen, "you lost");
-                                    }
-                                    else{
+                                    } else {
                                         gameModel.getTile(temp.getPositionX(), temp.getPositionY()).setSafe();
                                         gameModel.deactivateFirstTileRule();
                                         gameModel.click();
