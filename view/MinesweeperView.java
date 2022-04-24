@@ -230,6 +230,7 @@ public class MinesweeperView implements IGameStateNotifier {
                                     gameModel.toggleFlag(temp.getPositionX(), temp.getPositionY());
                                     notifyFlagged(temp.getPositionX(), temp.getPositionY());
                                     notifyFlagCountChanged(gameModel.getFlags());
+
                                 }
                             }
                         }
