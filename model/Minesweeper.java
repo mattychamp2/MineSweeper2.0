@@ -136,7 +136,7 @@ public class Minesweeper extends AbstractMineSweeper {
         generateWorld(height, width, mines);
         //myTimer.start();
     }
-
+//
     @Override
     public void toggleFlag(int x, int y) {
         if (world[x][y].isFlagged()) {
