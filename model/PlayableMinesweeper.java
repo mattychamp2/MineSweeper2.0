@@ -32,4 +32,5 @@ public interface PlayableMinesweeper {
     void openAround(int x, int y);
 
     boolean checkWin();
+
 }

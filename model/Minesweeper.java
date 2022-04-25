@@ -78,6 +78,7 @@ public class Minesweeper extends AbstractMineSweeper {
         world = new AbstractTile[width][height];
         Random random = new Random();
         int minesPlaced = 0;
+        secondsPassed = 0;
         tilesOpened = 0;
         while (minesPlaced < mines) {
             int nextX = random.nextInt(width);

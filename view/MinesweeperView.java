@@ -18,6 +18,9 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+//import java.util.Timer;
+import javax.swing.Timer;
+
 
 import java.text.DecimalFormat;
 
@@ -46,14 +49,12 @@ public class MinesweeperView implements IGameStateNotifier {
     private JLabel timerView = new JLabel();
     private JLabel flagCountView = new JLabel();
     private JLabel minesOnMap = new JLabel();
-    private int openedTiles;
 
     private int seconds;
     private int minutes;
     private Timer timer;
     private String doubleSeconds;
     private String doubleMinutes;
-    private DecimalFormat doubleFormat;
 
     public MinesweeperView() {
         timer();
@@ -70,6 +71,7 @@ public class MinesweeperView implements IGameStateNotifier {
         this.easyGame.addActionListener((ActionEvent e) -> {
             if (gameModel != null)
                 gameModel.startNewGame(Difficulty.EASY);
+            timer.stop();
             notifyNewGame(gameModel.getWidth(), gameModel.getHeight());
         });
         this.mediumGame = new JMenuItem("Medium");
@@ -77,6 +79,7 @@ public class MinesweeperView implements IGameStateNotifier {
         this.mediumGame.addActionListener((ActionEvent e) -> {
             if (gameModel != null)
                 gameModel.startNewGame(Difficulty.MEDIUM);
+            timer.stop();
             notifyNewGame(gameModel.getWidth(), gameModel.getHeight());
         });
         this.hardGame = new JMenuItem("Hard");
@@ -84,6 +87,7 @@ public class MinesweeperView implements IGameStateNotifier {
         this.hardGame.addActionListener((ActionEvent e) -> {
             if (gameModel != null)
                 gameModel.startNewGame(Difficulty.HARD);
+            timer.stop();
             notifyNewGame(gameModel.getHeight(), gameModel.getWidth());
         });
 
@@ -185,8 +189,9 @@ public class MinesweeperView implements IGameStateNotifier {
         this.minesOnMap.setText(String.valueOf(gameModel.getMines()));
         this.window.setSize(col * TILE_SIZE, row * TILE_SIZE + 30);
         this.world.removeAll();
-
-        timer.start();
+        seconds = 0;
+        minutes = 0;
+        timer.restart();
         this.tiles = new TileView[row][col];
         for (int i = 0; i < row; ++i) {
             for (int j = 0; j < col; ++j) {
@@ -199,8 +204,8 @@ public class MinesweeperView implements IGameStateNotifier {
                                 if (!gameModel.getTile(temp.getPositionX(), temp.getPositionY()).isExplosive() && !gameModel.getTile(temp.getPositionX(), temp.getPositionY()).isOpened()) {
                                     gameModel.open(temp.getPositionX(), temp.getPositionY());
                                     gameModel.click();
-                                    openedTiles++;
                                     if (gameModel.checkWin()) {
+                                        timer.stop();
                                         JOptionPane.showMessageDialog(winScreen, "congrats, you won");
                                     } else {
                                         gameModel.openAround(temp.getPositionX(), temp.getPositionY());
@@ -210,6 +215,7 @@ public class MinesweeperView implements IGameStateNotifier {
                                         gameModel.open(temp.getPositionX(), temp.getPositionY());
                                         notifyExploded(temp.getPositionX(), temp.getPositionY());
                                         notifyGameLost();
+                                        timer.stop();
                                         JOptionPane.showMessageDialog(lossScreen, "you lost");
                                     } else {
                                         gameModel.getTile(temp.getPositionX(), temp.getPositionY()).setSafe();
